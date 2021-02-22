@@ -17,7 +17,7 @@ export interface Registry<
 > {
   info (id: string): Promise<TClientInfo>,
   exists (id: string): Promise<boolean>,
-  create (id: string, info: Partial<TClientInfo>): Promise<TClientInfo>,
+  create (id: string, info?: Partial<TClientInfo>): Promise<TClientInfo>,
   update (id: string, info: Partial<TClientInfo>): Promise<TClientInfo>,
   delete (id: string): Promise<void>,
   register (id: string, socket: WebSocket): Promise<TClientInfo>,
@@ -43,13 +43,13 @@ TClientInfo extends DefaultClientInfo = DefaultClientInfo
     return this.#clients.has(id)
   }
 
-  public async create (id: string, info: Partial<TClientInfo>): Promise<TClientInfo> {
+  public async create (id: string, info?: Partial<TClientInfo>): Promise<TClientInfo> {
     if (await this.exists(id)) {
       throw new RegistryError('ID already exists')
     }
 
     const fullInfo: TClientInfo = omit({
-      ...info,
+      ...(info ?? {}),
       id,
       status: 'offline',
       createOn: new Date()
