@@ -1,0 +1,31 @@
+{
+  "name": "@lucets/registry",
+  "version": "0.1.0",
+  "description": "Client registry for @lucets/luce",
+  "main": "./dist/index.js",
+  "author": "Michiel van der Velde <michiel@michielvdvelde.nl>",
+  "homepage": "http://github.com/lucets/registry",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lucets/registry.git"
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=10"
+  },
+  "keywords": [
+    "luce",
+    "ws",
+    "websocket"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@lucets/luce": "^0.1.0",
+    "ws": "^7.4.3"
+  },
+  "devDependencies": {
+    "@types/ws": "^7.4.0"
+  }
+}
