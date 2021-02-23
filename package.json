@@ -22,7 +22,6 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@lucets/luce": "^0.1.0",
     "ws": "^7.4.3"
   },
   "devDependencies": {
