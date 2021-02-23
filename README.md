@@ -48,9 +48,12 @@ app.useUpgrade('post', async (ctx, next) => {
   // Register the socket with the registry
   await registry.register(ctx.state.id, ctx.socket)
 
-  // Callback to delete the ID on the flag
-  if (ctx.state.deleteOnClose) {
-    ctx.socket.once('close', async () => {
+  ctx.socket.once('close', async () => {
+    // Unregister the ID
+    await registry.unregister(ctx.state.id)
+  
+    // Delete the ID if the flag is set
+    if (ctx.state.deleteOnClose) {
       await registry.delete(ctx.state.id)
     }
   })
