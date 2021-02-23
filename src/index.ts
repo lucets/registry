@@ -12,8 +12,13 @@ export interface DefaultClientInfo {
   socket?: WebSocket
 }
 
+export interface DefaultMessage {
+  [key: string]: any
+}
+
 export interface Registry<
-  TClientInfo extends DefaultClientInfo = DefaultClientInfo
+  TClientInfo extends DefaultClientInfo = DefaultClientInfo,
+  TMessage extends DefaultMessage = DefaultMessage
 > {
   info (id: string): Promise<TClientInfo>,
   exists (id: string): Promise<boolean>,
@@ -22,7 +27,7 @@ export interface Registry<
   delete (id: string): Promise<void>,
   register (id: string, socket: WebSocket): Promise<TClientInfo>,
   unregister (id: string): Promise<void>,
-  send (id: string, message: string): Promise<void>
+  send (id: string, message: TMessage): Promise<void>
 }
 
 export class RegistryError extends Error {}
@@ -31,7 +36,8 @@ export class RegistryError extends Error {}
  * Represents an in-memory registry.
  */
 export class LocalRegistry<
-TClientInfo extends DefaultClientInfo = DefaultClientInfo
+  TClientInfo extends DefaultClientInfo = DefaultClientInfo,
+  TMessage extends DefaultMessage = DefaultMessage
 > implements Registry<TClientInfo> {
   #clients: Map<string, TClientInfo> = new Map()
 
@@ -112,7 +118,7 @@ TClientInfo extends DefaultClientInfo = DefaultClientInfo
     delete info.socket
   }
 
-  public async send (id: string, message: string): Promise<void> {
+  public async send (id: string, message: TMessage): Promise<void> {
     const info = await this.info(id)
 
     if (!info) {
@@ -126,7 +132,7 @@ TClientInfo extends DefaultClientInfo = DefaultClientInfo
     }
 
     return new Promise<void>((resolve, reject) => {
-      info.socket.send(message, err => {
+      info.socket.send(JSON.stringify(message), err => {
         if (err) return reject(err)
         resolve()
       })
