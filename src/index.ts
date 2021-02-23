@@ -7,7 +7,7 @@ import { omit } from './util'
 export interface DefaultClientInfo {
   id: string,
   status: 'online' | 'offline',
-  createOn: Date,
+  createdOn: Date,
   lastOnlineOn?: Date,
   socket?: WebSocket
 }
